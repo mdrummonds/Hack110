@@ -5,17 +5,18 @@ from GameZone.constants import *
 
 class Player:
     rect: pygame.Rect
-    color: tuple
 
     def __init__(self, rect) -> None:
         self.rect = rect
-        self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
     
     def update(self) -> None:
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.right > 720:
             self.rect.right = 720
+    
+    def getRect(self) -> pygame.Rect:
+        return self.rect
 
 
 class Foods:
@@ -37,22 +38,53 @@ class Foods:
         if self.rect.bottom >= 600:
             self.rect.bottom = random.randint(-1000, 0)
             self.rect.x = random.randint(0, 720)
+    
+
+class Animator:
+    animation_index: int
+    player_rect: pygame.Rect
+    index: int
+    time: int = 1
+
+    def __init__(self, rect: pygame.Rect):
+        self.player_rect = rect
+
+    # def cycleGifs(self, screen):
+    #     self.time += 1
+    #     if(self.time % 60 == 0):
+    #         self.index += 1
+    #         self.index = self.index % 5
+    #     image = pygame.image.load("GameZone/Medium Fat Cat " + str(self.index) + ".png")
+    #     image = pygame.transform.scale(image, (80, 80))
+    #     screen.blit(image, self.player_rect)
+
+    def cycleGifs(self, screen, index: int = 1):
+        self.index = index
+        image = pygame.image.load("GameZone/Medium Fat Cat " + str(self.index) + ".png")
+        image = pygame.transform.scale(image, (80, 80))
+        screen.blit(image, self.player_rect)
 
 
 def main():
-    screen = width, height = 720, 600
-    display = pygame.display.set_mode(screen)
+    size = width, height = 720, 600
+    screen = pygame.display.set_mode(size)
+    display = pygame.display.set_mode(size)
 
     clock = pygame.time.Clock()
     pygame.init()
+
+    index: int = 1
+
+    # background = pygame.image.load("GameZone/background.png")
 
     # pygame.mixer.music.load(BACKGROUND_MUSIC)
     # pygame.mixer.music.play(-1)
     # pygame.mixer.music.set_volume(1)
 
-    player = Player(pygame.Rect(360,550,20,20))
+    player = Player(pygame.Rect(360,500,20,20))
+    playerAnimator = Animator(player.getRect())
 
-    foods = [Foods(pygame.Rect(random.randint(0, 720), random.randint(-1000, 0), 20, 20), random.random()) for i in range(20)]
+    foods = [Foods(pygame.Rect(random.randint(0, 720), random.randint(-1000, 0), 20, 20), random.random()) for i in range(10)]
 
     while 1:
         display.fill((255,255,255))
@@ -73,15 +105,19 @@ def main():
                 # pygame.mixer.music.load(SCORE_NOISE)
                 # pygame.mixer.music.play(1)
                 # pygame.mixer.music.set_volume(1)
-                pygame.time.delay(500)
+                i.rect.top = 0
+                #pygame.time.delay(500)
                 if i.is_yummy:
-                    print("Good food")
+                    index += 1
                 else:
-                    print("Bad food")
-                pygame.quit()
+                    index -= 1
+                #playerAnimator.cycleGifs(screen, index)
+                if index > 5 or index < 0:
+                    pygame.quit()
             pygame.draw.rect(display, i.color, i.rect)
 
-        pygame.draw.rect(display, player.color, player.rect)
+        # screen.blit(background, (0, 0))
+        playerAnimator.cycleGifs(screen, index)
         pygame.display.update()
 
 
