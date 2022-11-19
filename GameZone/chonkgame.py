@@ -1,5 +1,6 @@
 import pygame 
 import random
+from GameZone.constants import *
 
 
 class Player:
@@ -45,6 +46,10 @@ def main():
     clock = pygame.time.Clock()
     pygame.init()
 
+    # pygame.mixer.music.load(BACKGROUND_MUSIC)
+    # pygame.mixer.music.play(-1)
+    # pygame.mixer.music.set_volume(1)
+
     player = Player(pygame.Rect(360,550,20,20))
 
     foods = [Foods(pygame.Rect(random.randint(0, 720), random.randint(-1000, 0), 20, 20), random.random()) for i in range(20)]
@@ -65,6 +70,10 @@ def main():
         for i in foods:
             i.fall()
             if i.rect.colliderect(player.rect):
+                # pygame.mixer.music.load(SCORE_NOISE)
+                # pygame.mixer.music.play(1)
+                # pygame.mixer.music.set_volume(1)
+                pygame.time.delay(500)
                 if i.is_yummy:
                     print("Good food")
                 else:
