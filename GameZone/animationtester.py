@@ -6,7 +6,7 @@ pygame.init()
 
 size = width, height = 640, 480
 
-background = pygame.image.load("GameZone/Medium Fat Cat 0.png")
+background = pygame.image.load("GameZone/backdrop.png")
 
 screen = pygame.display.set_mode(size)
 player = Player(1, pygame.Rect(50, 50, 40 ,40))
