@@ -27,10 +27,10 @@ class Foods:
     def __init__(self, rect, is_yummy: float) -> None:
         self.rect = rect
         if is_yummy > 0.5:
-            self.color = (0, 0, 255)
+            self.color = (255, 255, 255)
             self.is_yummy = True
         else:
-            self.color = (255, 0, 0)
+            self.color = (255, 255, 255)
             self.is_yummy = False
 
     def fall(self):
@@ -38,7 +38,20 @@ class Foods:
         if self.rect.bottom >= 600:
             self.rect.bottom = random.randint(-1000, 0)
             self.rect.x = random.randint(0, 720)
-    
+
+    def chunk(self, screen, sweet: bool):
+        if sweet:
+            image = pygame.image.load("GameZone/Cupcake.png")
+            image = pygame.transform.scale(image, (80, 80))
+            screen.blit(image, self.rect)
+        else:
+            image = pygame.image.load("GameZone/Vegetable.png")
+            image = pygame.transform.scale(image, (80, 80))
+            screen.blit(image, self.rect)
+
+    def getRect(self) -> pygame.Rect:
+        return self.rect
+
 
 class Animator:
     animation_index: int
@@ -101,6 +114,7 @@ def main():
 
         for i in foods:
             i.fall()
+            i.chunk(screen, i.is_yummy)
             if i.rect.colliderect(player.rect):
                 # pygame.mixer.music.load(SCORE_NOISE)
                 # pygame.mixer.music.play(1)
@@ -112,7 +126,11 @@ def main():
                 else:
                     index -= 1
                 #playerAnimator.cycleGifs(screen, index)
-                if index > 5 or index < 0:
+                if index > 5:
+                    print("You are a chonky boi!")
+                    pygame.quit()
+                elif index < 0:
+                    print("Did you even try to chonk?")
                     pygame.quit()
             pygame.draw.rect(display, i.color, i.rect)
 
