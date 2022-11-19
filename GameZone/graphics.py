@@ -13,6 +13,6 @@ class Animator:
         if(self.time % 60 == 0):
             self.index += 1
             self.index = self.index % 2
-        image = pygame.image.load("mediumfatcat" + str(self.index) + ".png")
+        image = pygame.image.load("GameZone/Medium Fat Cat " + str(self.index) + ".png")
         image = pygame.transform.scale(image, (40, 40))
         screen.blit(image, self.player_rect)
